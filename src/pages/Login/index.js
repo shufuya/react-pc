@@ -1,13 +1,26 @@
 import React from 'react'
 import './index.scss'
 import logo from '@/assets/logo.png'
-import { Card, Form, Input, Checkbox, Button } from 'antd'
-// import { useNavigate } from 'react-router-dom'
+import { Card, Form, Input, Checkbox, Button, message } from 'antd'
+import { useNavigate } from 'react-router-dom'
 // 导入样式文件
 import './index.scss'
-// import { useStore } from '@/store'
+import { useStore } from '@/store'
 
 const Login = () => {
+  const { loginStore } = useStore()
+  const navigate = useNavigate()
+  async function onFinish(values) {
+    console.log(values)
+    // values：放置的是所有表单项中用户输入的内容
+    // todo:登录
+    const { mobile, code } = values
+    await loginStore.getToken({ mobile, code })
+    // 跳转首页
+    navigate('/', { replace: true })
+    // 提示用户
+    message.success('登录成功')
+  }
   return (
     <div className='login'>
       <Card className="login-container">
@@ -21,7 +34,7 @@ const Login = () => {
             mobile: '13811111111',
             code: '246810'
           }}
-        // onFinish={onFinish}
+        onFinish={onFinish}
         >
           <Form.Item
             name="mobile"
